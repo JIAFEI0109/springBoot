@@ -7,6 +7,137 @@
     <groupId>com.cqabj</groupId>
     <artifactId>springBoot</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>springBoot</name>
+    <description>springBoot的ssh框架</description>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-parent</artifactId>
+        <version>1.5.9.RELEASE</version>
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <tomcat.version>7.0.73</tomcat.version>
+        <!--
+         * compile，缺省值，适用于所有阶段，会随着项目一起发布。
+            * provided，类似compile，期望JDK、容器或使用者会提供这个依赖。如servlet.jar。
+            * runtime，只在运行时使用，如JDBC驱动，适用运行和测试阶段。
+            * test，只在测试时使用，用于编译和运行测试代码。不会随项目发布。
+            * system，类似provided，需要显式提供包含依赖的jar，Maven不会在Repository中查找它。
+         -->
+        <provid.scope>provided</provid.scope>
+        <useful.scope>compile</useful.scope>
+        <test.scope>test</test.scope>
+        <java.version>1.7</java.version>
+        <swagger2.version>2.6.1</swagger2.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- 数据库驱动 -->
+            <!-- MYSQL驱动 -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>6.0.6</version>
+            </dependency>
+
+            <!--
+            Apache MINA java socket框架
+            用于http文件传输
+            可支持多种文本传输
+             -->
+            <dependency>
+                <groupId>org.apache.mina</groupId>
+                <artifactId>mina-core</artifactId>
+                <version>2.0.16</version>
+            </dependency>
+
+            <!-- cache -->
+            <dependency>
+                <groupId>net.sf.ehcache</groupId>
+                <artifactId>ehcache</artifactId>
+                <version>2.10.4</version>
+            </dependency>
+
+            <!-- 数据库连接池 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>1.1.6</version>
+            </dependency>
+
+            <!-- 数据库版本管理工具 -->
+            <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-core</artifactId>
+                <version>4.2.0</version>
+            </dependency>
+
+            <!-- 日志 -->
+            <dependency>
+                <groupId>com.googlecode.log4jdbc</groupId>
+                <artifactId>log4jdbc</artifactId>
+                <version>1.2</version>
+            </dependency>
+
+            <!-- 其他工具 -->
+            <!-- Base64Url -->
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.11</version>
+            </dependency>
+
+            <!-- 图像处理 -->
+            <dependency>
+                <groupId>net.coobird</groupId>
+                <artifactId>thumbnailator</artifactId>
+                <version>0.4.8</version>
+                <scope>${useful.scope}</scope>
+            </dependency>
+
+            <!-- fastjson -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>1.2.44</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>19.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.7</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>3.17</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>3.17</version>
+            </dependency>
+
+            <!-- java代码简洁工具 -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.16.6</version>
+            </dependency>
+
+        </dependencies>
+
+    </dependencyManagement>
 
 
 </project>
