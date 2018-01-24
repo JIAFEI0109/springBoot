@@ -1,0 +1,9 @@
+banner:
+  charset: utf-8
+  location: classpath:banner.txt
+#配置总览,控制加载哪个配置文件
+spring:
+  profiles:
+    active: @active.profile.name@
+  application:
+    name: springBoot

@@ -1,0 +1,100 @@
+##配置内置Tomcat相关参数,使用尾部Tomcat时不生效
+server:
+  port: 8080
+  contextPath: /springBoot
+  session:
+    timeout: 1800
+  tomcat:
+    max-threads: 1000
+    max-connections: 2000
+  connection-timeout: 30000
+  compression: #当文件过大时是否进行压缩
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+## 数据库迁移管理
+flyway:
+  baseline-version: 1
+  enabled: false
+  baseline-on-migrate: true
+  locations: classpath:db/migration/{vendor}
+  sql-migration-prefix: V
+  sql-migration-suffix: .sql
+  user: @db.username@
+  password: @db.pwd@
+  url: jdbc:@db.url@
+##跨域指定域名IP,配置
+
+##日志
+logging:
+  path: @log.file.path@/springBoot
+  file: @log.file.path@/springBoot.log
+  console-charset: @logging.console.charset@
+  file-charset: UTF-8
+##不需要数据签名验证的方法
+
+##Spring配置
+spring:
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+  #redis相关参数
+
+  #MySQL数据源相关参数
+  datasource:
+    username: @db.username@
+    password: @db.pwd@
+    url: jdbc:log4jdbc:@db.url@ # log4jdbc会记录sql
+    initialSize: 10 #初始化连接，连接池启动时创建的初始化连接数量设为0表示无限制
+    maxActive: 50 #连接池的最大数据库连接数。设为0表示无限制。
+    minIdle: 10 #最小空闲连接，连接池中最小的空闲的连接数，低于这个数量会被创建新的连接 设为0表示无限制。
+    #最大空闲数，数据库连接的最大空闲时间。超过空闲时间，数据库连接将被标记为不可用，然后被释放。设为0表示无限制。
+    maxWait: 600000 # 最大等待毫秒数, 单位为 ms
+    removeAbandonedTimeout: 180 #泄露的连接可以被删除的超时值, 单位秒
+    removeAbandoned: true #标记是否删除泄露的连接,如果他们超过了removeAbandonedTimout的限制.如果设置为true, 连接被认为是被泄露并且可以被删除,如果空闲时间超过removeAbandonedTimeout.
+    defaultAutoCommit: false #true连接池创建的连接的默认的auto-commit状态
+    logAbandoned: false #如果想用log记录丢弃的连接，可以设置为true。当设置为true时，调用dataSource.getConnection 时会记录一个堆栈追踪，并且被打印出来当连接没有返回的时候。
+    testWhileIdle: false #指明连接是否被空闲连接回收器(如果有)进行检验.如果检测失败,则连接将被从池中去除.注意: 设置为true后如果要生效,validationQuery参数必须设置为非空字符串
+    testOnBorrow: false #指明是否在从池中取出连接前进行检验,如果检验失败,则从池中去除连接并尝试取出另一个.注意: 设置为true后如果要生效,validationQuery参数必须设置为非空字符串
+    testOnReturn: false #指明是否在归还到池中前进行检验 注意: 设置为true后如果要生效,validationQuery参数必须设置为非空字符串
+    validationQuery: select 'x' #SQL查询,用来验证从连接池取出的连接,在将连接返回给调用者之前.如果指定,则查询必须是一个SQL SELECT并且必须返回至少一行记录
+    validationQueryTimeout: 1 #测试有效的超时时间
+    timebetweenEvictionRunsMillis: 60000 #每60秒运行一次空闲连接回收器
+    minEvictableIdleTimeMillis: 300000 #连接空闲5分钟后被回收
+    poolPreparedStatements: false #是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。
+    maxPoolPreparedStatementPerConnectionSize: 20 #要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。在Druid中，不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100
+    #druid数据库连接池
+    druid:
+      aopPatterns: com.cqabj.springboot.service.*.,com.cqabj.springboot.dao.*.
+      StatViewServlet:
+        urlPattern: /druid/*
+        allow: @druid.allow.ip@
+        loginUsername: @db.username@
+        loginPassword: @db.pwd@
+        resetEnable: false
+        enable: true
+  #Spring security相关配置
+  security:
+    remember:
+      key:
+      parameter:
+      cookie-name:
+    admin:
+      resources:
+        -
+        -
+    #静态资源
+    web-ant-matchers:
+      -
+      -
+##hibernate配置
+hibernate:
+  hbm2ddl:
+    auto: validate #在SessionFactory创建时，自动检查数据库结构， 取值 validate | update | create | create-drop
+  show_sql: false
+  format_sql: false
+  use_sql_commente: false
+  dialect: org.hibernate.dialect.MySQLInnoDBDialect #允许Hibernate针对特定的关系数据库生成优化的SQL.
+  packagesToScan: com.cqabj.springboot.model
+  cache:
+    provider_class: org.hibernate.cache.NoCacheProvider #自定义的CacheProvider的类名.
