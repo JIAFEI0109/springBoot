@@ -4,6 +4,6 @@ banner:
 #配置总览,控制加载哪个配置文件
 spring:
   profiles:
-    active: @active.profile.name@
+    active: dev
   application:
     name: springBoot

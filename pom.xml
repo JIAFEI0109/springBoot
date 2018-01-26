@@ -80,10 +80,15 @@
                 <version>${swagger2.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.mvnsearch.spring.boot</groupId>
+                <artifactId>spring-boot-starter-hibernate5</artifactId>
+            </dependency>
+
             <!-- 数据库连接池 -->
             <dependency>
                 <groupId>com.alibaba</groupId>
-                <artifactId>druid</artifactId>
+                <artifactId>druid-spring-boot-starter</artifactId>
                 <version>1.1.6</version>
             </dependency>
 
@@ -162,7 +167,8 @@
             <properties>
                 <active.profile.name>dev</active.profile.name>
                 <logging.console.charset>UTF-8</logging.console.charset>
-                <db.url>mysql://192.168.2.55:3306/springBoot?useUnicode=true&amp;character</db.url>
+                <db.url>mysql://192.168.2.55:3306/springBoot?useUnicode=true&amp;characterEncoding=UTF-8
+                </db.url>
                 <db.username>root</db.username>
                 <db.pwd>cqabj208</db.pwd>
                 <log.file.path>d:/springBootLog/</log.file.path>

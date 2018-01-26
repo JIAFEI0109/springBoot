@@ -1,17 +1,13 @@
 package com.cqabj.springboot.web.config.datasource;
 
-import com.alibaba.druid.filter.Filter;
-import com.alibaba.druid.filter.logging.LogFilter;
-import com.alibaba.druid.pool.DruidDataSourceFactory;
-import com.alibaba.druid.stat.DruidDataSourceStatManager;
-import com.alibaba.druid.util.DruidDataSourceUtils;
+import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.util.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DatabaseDriver;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-
+import org.springframework.context.annotation.Primary;
 import javax.sql.DataSource;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 数据源
@@ -21,19 +17,30 @@ import java.util.List;
 @Configuration
 public class DataSourceConfiguration {
 
-    @ConfigurationProperties(prefix = "spring.datasource")
-    public DataSource dataSource(Environment env, LogFilter logFilter, Filter statFilter,
-                                 Filter wallFilter) {
-        /*
-         * sql防火墙
-         * druid监控：spring、service、dao调用统计
-         */
-        List<Filter> proxyFilters = new ArrayList<>();
-        proxyFilters.add(wallFilter);
-        proxyFilters.add(statFilter);
-        proxyFilters.add(logFilter);
+    @Primary
+    @ConfigurationProperties("spring.datasource.druid")
+    @Bean(initMethod = "init", destroyMethod = "close")
+    public DataSource dataSource() {
+        DruidDataSource build = new DruidDataSource();
+        //maybeGetDriverClassName(build);
+        return build;
+    }
 
-        return null;
-
+    /**
+     * 通过url头部节点判断出对应的数据库类型
+     * @param build 数据源
+     */
+    private void maybeGetDriverClassName(DruidDataSource build) {
+        String driverClass = build.getDriverClassName();
+        String url = build.getUrl();
+//        if (!StringUtils.isEmpty(driverClass)
+//            && !StringUtils.isEmpty(url)) {
+            //String driverClassName = DatabaseDriver.fromJdbcUrl(build.getUrl())
+            String driverClassName = DatabaseDriver.fromJdbcUrl("jdbc:mysql://192.168.2.55:3306/springboot?useUnicode=true&characterEncoding=UTF-8")
+                .getDriverClassName();
+            if (!StringUtils.isEmpty(driverClassName)) {
+                build.setDriverClassName(driverClassName);
+            }
+//        }
     }
 }
