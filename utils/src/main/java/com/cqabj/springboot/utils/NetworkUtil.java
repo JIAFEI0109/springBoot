@@ -1,10 +1,13 @@
 package com.cqabj.springboot.utils;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
@@ -20,6 +23,8 @@ public class NetworkUtil {
     private static int    notFind       = -1;
 
     private static String unknownString = "unkonwn";
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     /**
      * 判断是否ajax
@@ -186,6 +191,20 @@ public class NetworkUtil {
             StringUtils.outPutException(e);
         }
         return result;
+    }
+
+    /**
+     * 输出对应json信息
+     */
+    public static void responseJSONMsg(HttpServletResponse response, Object obj){
+        debugLogger("responseJSONMsg","输出数据","开始");
+        response.setHeader("Content-Type", "application/json;charset=UTF-8");
+        try {
+            MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            MAPPER.writeValue(response.getOutputStream(), obj);
+        } catch (IOException e) {
+            log.error(StringUtils.outPutException(e));
+        }
     }
 
 }

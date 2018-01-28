@@ -7,3 +7,5 @@ spring:
     active: dev
   application:
     name: springBoot
+  config:
+    location: classpath:filePath/config.yml

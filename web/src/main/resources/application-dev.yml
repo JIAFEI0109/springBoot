@@ -48,7 +48,7 @@ spring:
     druid:
       enable: true
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://192.168.2.55:3306/springboot?serverTimezone=GMT # log4jdbc会记录sql
+      url: jdbc:mysql://localhost:3306/springboot?serverTimezone=GMT # log4jdbc会记录sql
       username: root
       password: cqabj208
       #连接池配置
@@ -114,5 +114,3 @@ spring:
         packageToScan: com.cqabj.springboot.model
         cahce:
           provider_class: org.hibernate.cache.NoCacheProvider
-  #Spring security相关配置
-

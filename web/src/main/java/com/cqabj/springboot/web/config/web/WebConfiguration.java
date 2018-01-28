@@ -27,6 +27,7 @@ import java.util.Map;
 @Configuration
 public class WebConfiguration extends WebMvcConfigurerAdapter {
 
+    private static final String FILE_PFEFIX = "file:";
     private static final String OUT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     @Resource
@@ -104,6 +105,22 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         super.addResourceHandlers(registry);
+
+        String rootPath = uploadProperties.getFile().getRootPath();
+        String formalPath = uploadProperties.getFile().getFormalPath();
+        String tempPath = uploadProperties.getFile().getTempPath();
+        String imagePath = uploadProperties.getFile().getImagePath();
+        String filePath = uploadProperties.getFile().getFilePath();
+        String imageMapping = uploadProperties.getMapping().getImage();
+        String tempImageMapping = uploadProperties.getMapping().getTempImage();
+        String fileMapping = uploadProperties.getMapping().getFile();
+
+        //添加image映射路径
+        registry.addResourceHandler(imageMapping).addResourceLocations(FILE_PFEFIX.concat(rootPath).concat(formalPath).concat(filePath));
+        //添加excel映射路径
+        registry.addResourceHandler(fileMapping).addResourceLocations(FILE_PFEFIX.concat(rootPath).concat(formalPath).concat(filePath));
+        //添加temp(临时) image 映射路径
+        registry.addResourceHandler(tempImageMapping).addResourceLocations(FILE_PFEFIX.concat(rootPath).concat(tempPath).concat(imagePath));
 
     }
 }

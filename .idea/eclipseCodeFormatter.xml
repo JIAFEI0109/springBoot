@@ -3,11 +3,9 @@
   <component name="EclipseCodeFormatterProjectSettings">
     <option name="projectSpecificProfile">
       <ProjectSpecificProfile>
-        <option name="formatter" value="ECLIPSE" />
         <option name="importOrderConfigFilePath" value="$USER_HOME$/Desktop/style/code_style.xml" />
         <option name="importOrderFromFile" value="true" />
         <option name="pathToConfigFileJava" value="$USER_HOME$/Desktop/style/code_style.xml" />
-        <option name="selectedJavaProfile" value="Alipay Convention" />
       </ProjectSpecificProfile>
     </option>
   </component>
