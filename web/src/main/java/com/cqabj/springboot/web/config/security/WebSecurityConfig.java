@@ -69,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 				//
 				.and().csrf().requireCsrfProtectionMatcher(userRequiresCsrfMatcher())
 				//
-				.and().rememberMe().key(securityProperties.getRemember().getKey()).rememberMeServices(RememberMeServices)
+				.and().rememberMe().key(securityProperties.getRemember().getKey()).rememberMeServices(null);
 	}
 
 	private RequestMatcher userRequiresCsrfMatcher() {
