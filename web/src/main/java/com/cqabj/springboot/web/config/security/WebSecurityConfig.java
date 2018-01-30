@@ -27,54 +27,53 @@ import java.util.regex.Matcher;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Resource
-	private UserSecurityProperties securityProperties;
+    @Resource
+    private UserSecurityProperties securityProperties;
 
+    @Override
+    protected AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
+    }
 
+    /**
+     * web相关配置静态资源
+     * @param web web
+     * @throws Exception exception
+     */
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers(securityProperties.getWebAntMatchers());
+    }
 
-	@Override
-	protected AuthenticationManager authenticationManager() throws Exception {
-		return super.authenticationManager();
-	}
+    /**
+     *
+     * @param http http
+     * @throws Exception exception
+     */
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        //没有权限异常拦截向/authExp 跳转
+        http.exceptionHandling().accessDeniedPage("/authExp")
+            //除了error其他所有访问都具有USER权限
+            .and().authorizeRequests().antMatchers("/error").permitAll().antMatchers("/**")
+            .hasRole("USER")
+            //允许来自/logon的请求
+            .and().formLogin().loginPage("/logon").permitAll()
+            //登出,同时是session失效并添加登出成功拦截器
+            .and().logout().invalidateHttpSession(true).logoutUrl("/logout")
+            .logoutSuccessHandler(new LogoutSuccessHandler())
+            //
+            .and().csrf().requireCsrfProtectionMatcher(userRequiresCsrfMatcher())
+            //
+            .and().rememberMe().key(securityProperties.getRemember().getKey())
+            .rememberMeServices(null);
+    }
 
-
-	/**
-	 * web相关配置静态资源
-	 * @param web web
-	 * @throws Exception exception
-	 */
-	@Override
-	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers(securityProperties.getWebAntMatchers());
-	}
-
-
-	/**
-	 *
-	 * @param http http
-	 * @throws Exception exception
- 	 */
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		//没有权限异常拦截向/authExp 跳转
-		http.exceptionHandling().accessDeniedPage("/authExp")
-				//除了error其他所有访问都具有USER权限
-				.and().authorizeRequests().antMatchers("/error").permitAll().antMatchers("/**").hasRole("USER")
-				//允许来自/logon的请求
-				.and().formLogin().loginPage("/logon").permitAll()
-				//登出,同时是session失效并添加登出成功拦截器
-				.and().logout().invalidateHttpSession(true).logoutUrl("/logout").logoutSuccessHandler(new LogoutSuccessHandler())
-				//
-				.and().csrf().requireCsrfProtectionMatcher(userRequiresCsrfMatcher())
-				//
-				.and().rememberMe().key(securityProperties.getRemember().getKey()).rememberMeServices(null);
-	}
-
-	private RequestMatcher userRequiresCsrfMatcher() {
-		UserRequiresCsrfMatcher csrfMatcher = new UserRequiresCsrfMatcher();
-		csrfMatcher.setExecludeUrlsl(securityProperties.getCsrf().getExecludeUrls());
-		return csrfMatcher;
-	}
+    private RequestMatcher userRequiresCsrfMatcher() {
+        UserRequiresCsrfMatcher csrfMatcher = new UserRequiresCsrfMatcher();
+        csrfMatcher.setExecludeUrlsl(securityProperties.getCsrf().getExecludeUrls());
+        return csrfMatcher;
+    }
 }

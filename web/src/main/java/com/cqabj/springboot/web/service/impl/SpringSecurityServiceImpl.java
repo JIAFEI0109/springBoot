@@ -1,6 +1,7 @@
 package com.cqabj.springboot.web.service.impl;
 
 import com.cqabj.springboot.model.entity.UserInfo;
+import com.cqabj.springboot.web.dao.UserInfoDao;
 import com.cqabj.springboot.web.service.SpringSecurityService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,23 +15,23 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class SpringSecurityServiceImpl  implements SpringSecurityService{
+public class SpringSecurityServiceImpl extends BaseService implements SpringSecurityService {
+
+    private UserInfoDao userInfoDao;
 
 
+    @Override
+    public UserInfo getByName(String userName) {
+        return userInfoDao.getUserInfoByName(userName);
+    }
 
+    @Override
+    public void validateUser(UserInfo user) {
 
-	@Override
-	public UserInfo getByNameWithNoAuth(String userName) {
-		return null;
-	}
+    }
 
-	@Override
-	public void validateUser(UserInfo user) {
-
-	}
-
-	@Override
-	public void initData(UserInfo user) {
-
-	}
+    @Override
+    public void initData(UserInfo user) {
+        
+    }
 }

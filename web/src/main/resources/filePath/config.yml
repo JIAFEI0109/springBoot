@@ -1,25 +1,26 @@
-#
-#Spring security相关配置
-security:
-  remember:
-    key: cqabj
-    parameter: _remember_me
-    cookie-name: REMEMBER_ME
-  admin:
-    resources:
-      - /cache
-      - /admin
-      - /management
-  #静态资源
-  web-ant-matchers:
-    - /favicon.ico
-    - /druid/**
-    - /image/**
-    - /tempImage/**
-    - /file/**
-  #跨域制定域名IP
-  csrf:
-    ebable: true
-    execludeUrls:
-      - 127.0.0.1
-      - localhost
+#根
+base:
+  #Spring security相关配置
+  security:
+    remember:
+      key: cqabj
+      parameter: _remember_me
+      cookie-name: REMEMBER_ME
+    admin:
+      resources:
+        - /cache
+        - /admin
+        - /management
+    #静态资源
+    web-ant-matchers:
+      - /favicon.ico
+      - /druid/**
+      - /image/**
+      - /tempImage/**
+      - /file/**
+    #跨域制定域名IP
+    csrf:
+      ebable: true
+      execludeUrls:
+        - 127.0.0.1
+        - localhost

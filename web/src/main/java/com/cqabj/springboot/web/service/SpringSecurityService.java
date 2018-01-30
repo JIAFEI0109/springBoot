@@ -9,22 +9,22 @@ import com.cqabj.springboot.model.entity.UserInfo;
  */
 public interface SpringSecurityService {
 
-	/**
-	 * 根据登录名获取系统用户登录信息（不包含权限信息）
-	 * @param userName 用户名
-	 * @return UserInfo 用户信息
-	 */
-	UserInfo getByNameWithNoAuth(String userName);
+    /**
+     * 根据登录名获取系统用户登录信息（不包含权限信息）
+     * @param userName 用户名
+     * @return UserInfo 用户信息
+     */
+    UserInfo getByName(String userName);
 
-	/**
-	 * 验证用户有效性
-	 * @param user 用户信息
-	 */
-	void validateUser(UserInfo user);
+    /**
+     * 验证用户有效性
+     * @param user 用户信息
+     */
+    void validateUser(UserInfo user);
 
-	/**
-	 * 初始化用户权限数据
-	 * @param user 用户信息
-	 */
-	void initData(UserInfo user);
+    /**
+     * 初始化用户权限数据
+     * @param user 用户信息
+     */
+    void initData(UserInfo user);
 }

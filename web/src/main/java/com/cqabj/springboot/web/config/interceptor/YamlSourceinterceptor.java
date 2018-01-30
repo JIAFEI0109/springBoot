@@ -24,25 +24,26 @@ import java.io.IOException;
 @Component
 public class YamlSourceinterceptor {
 
-	@Resource
-	private ConfigurableApplicationContext context;
+    @Resource
+    private ConfigurableApplicationContext context;
 
-	@Before(value = "@annotation(com.cqabj.springboot.web.*)")
-	public void doBefore(JoinPoint joinPoint){
-		Object target = joinPoint.getTarget();
-		YamlSource yamlSource = target.getClass().getAnnotation(YamlSource.class);
-		String path = yamlSource.path();
-		String prefix = yamlSource.prefix();
+    @Before(value = "@annotation(com.cqabj.springboot.web.common.annotation.YamlSource)")
+    public void doBefore(JoinPoint joinPoint) {
+        Object target = joinPoint.getTarget();
+        YamlSource yamlSource = target.getClass().getAnnotation(YamlSource.class);
+        String path = yamlSource.path();
+        String prefix = yamlSource.prefix();
 
-		try {
-			org.springframework.core.io.Resource resource = context.getResource(path);
-			YamlPropertySourceLoader sourceLoader = new YamlPropertySourceLoader();
-			PropertySource<?> load = sourceLoader.load(prefix, resource, null);
-			context.getEnvironment().getPropertySources().addFirst(load);
-		} catch (IOException e) {
-			StringUtils.outPutException(e);
-		}
-	}
+        try {
+            org.springframework.core.io.Resource resource = context
+                .getResource("classpath:" + path);
+            YamlPropertySourceLoader sourceLoader = new YamlPropertySourceLoader();
+            PropertySource<?> load = sourceLoader.load(prefix, resource, null);
+            context.getEnvironment().getPropertySources().addFirst(load);
+        } catch (IOException e) {
+            StringUtils.outPutException(e);
+        }
+    }
 
-	/* YmalFileApplicationContextInitializer */
+    /* YmalFileApplicationContextInitializer */
 }

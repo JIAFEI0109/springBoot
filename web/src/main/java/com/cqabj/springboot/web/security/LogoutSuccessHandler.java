@@ -19,10 +19,11 @@ import java.io.IOException;
  */
 @Component
 public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
-	@Override
-	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
-								Authentication authentication) throws IOException, ServletException {
-		super.onLogoutSuccess(request, response, authentication);
-		NetworkUtil.responseJSONMsg(response, ResultInfo.createSuccessResult("登出成功"));
-	}
+    @Override
+    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
+                                Authentication authentication) throws IOException,
+                                                               ServletException {
+        super.onLogoutSuccess(request, response, authentication);
+        NetworkUtil.responseJSONMsg(response, ResultInfo.createSuccessResult("登出成功"));
+    }
 }

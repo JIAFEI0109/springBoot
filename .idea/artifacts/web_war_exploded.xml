@@ -24,6 +24,11 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-aop:4.3.13.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-beans:4.3.13.RELEASE" />
           <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:3.1.0" />
+          <element id="library" level="project" name="Maven: org.yaml:snakeyaml:1.17" />
+          <element id="library" level="project" name="Maven: org.junit.jupiter:junit-jupiter-api:5.1.0-M2" />
+          <element id="library" level="project" name="Maven: org.apiguardian:apiguardian-api:1.0.0" />
+          <element id="library" level="project" name="Maven: org.opentest4j:opentest4j:1.0.0" />
+          <element id="library" level="project" name="Maven: org.junit.platform:junit-platform-commons:1.1.0-M2" />
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-web:1.5.9.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter:1.5.9.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot:1.5.9.RELEASE" />
@@ -32,7 +37,6 @@
           <element id="library" level="project" name="Maven: ch.qos.logback:logback-core:1.1.11" />
           <element id="library" level="project" name="Maven: org.slf4j:jul-to-slf4j:1.7.25" />
           <element id="library" level="project" name="Maven: org.slf4j:log4j-over-slf4j:1.7.25" />
-          <element id="library" level="project" name="Maven: org.yaml:snakeyaml:1.17" />
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-tomcat:1.5.9.RELEASE" />
           <element id="library" level="project" name="Maven: org.apache.tomcat.embed:tomcat-embed-core:7.0.73" />
           <element id="library" level="project" name="Maven: org.apache.tomcat.embed:tomcat-embed-el:7.0.73" />
