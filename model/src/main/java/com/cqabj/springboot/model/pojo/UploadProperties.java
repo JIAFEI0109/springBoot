@@ -1,4 +1,4 @@
-package com.cqabj.springboot.model.entity;
+package com.cqabj.springboot.model.pojo;
 
 import lombok.Data;
 import lombok.ToString;

@@ -19,57 +19,38 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 系统资源表
+ * 系统角色表
  * @author fjia
- * @version V1.0 --2018/1/29-${time}
+ * @version V1.0 --2018/1/31-${time}
  */
 @Data
 @Entity
 @ToString
 @DynamicInsert
 @DynamicUpdate
-@NoArgsConstructor
 @EqualsAndHashCode
-@Table(name = "sys_resources")
-public class SysResources implements Serializable {
+@NoArgsConstructor
+@Table(name = "sys_roles")
+public class SysRoles implements Serializable {
 
-    private static final long serialVersionUID = 7288120982751110476L;
+    private static final long serialVersionUID = -7988484633800550140L;
 
     @Id
-    @Column(name = "resource_id", nullable = false)
+    @Column(name = "role_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long              resourceId;
+    private Long              roleId;
 
     @Basic
-    @Column(name = "resource_type")
-    private Long              resourceType;
-    @Basic
-    @Column(name = "resource_name", length = 100)
-    private String            resourceName;
+    @Column(name = "role_name", length = 100)
+    private String            roleName;
 
     @Basic
-    @Column(name = "resource_desc", length = 200)
-    private String            resourceDesc;
-
-    @Basic
-    @Column(name = "client_type")
-    private Long              clientType;
-
-    @Basic
-    @Column(name = "resource_path", length = 200)
-    private String            resourcePath;
-
-    @Basic
-    @Column(name = "interface_path", nullable = false, length = 200)
-    private String            interfacePath;
+    @Column(name = "role_desc", length = 200)
+    private String            roleDesc;
 
     @Basic
     @Column(name = "disable_flag")
     private Long              disableFlag      = 1L;
-
-    @Basic
-    @Column(name = "sys_flag")
-    private Long              sysFlag          = 0L;
 
     @Basic
     @Column(name = "gmt_create")
@@ -80,5 +61,4 @@ public class SysResources implements Serializable {
     @Column(name = "gmt_mod")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date              gmtMod;
-
 }

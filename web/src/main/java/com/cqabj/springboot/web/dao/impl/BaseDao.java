@@ -3,10 +3,12 @@ package com.cqabj.springboot.web.dao.impl;
 import com.cqabj.springboot.utils.ObjectUtil;
 import com.cqabj.springboot.web.dao.CrudDao;
 import org.apache.commons.lang3.ArrayUtils;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.Type;
 import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.orm.hibernate5.HibernateTemplate;
@@ -74,10 +76,69 @@ abstract class BaseDao implements CrudDao {
             public T doInHibernate(Session session) throws HibernateException {
                 SQLQuery query = session.createSQLQuery(sql);
                 whereCondition(query, keys, values, types);
-                if (clazz!=null){
+                if (clazz != null) {
                     query.addEntity(clazz);
                 }
                 return ObjectUtil.typeConversion(query.uniqueResult());
+            }
+        });
+    }
+
+    /**
+     *
+     * @param clazz 持久化实体
+     * @param keys 查询key实体的属性名
+     * @param values 查询条件
+     * @param <T> 返回实体
+     * @return 实体集合
+     */
+    public <T> T criteriaExecuteUniqueResult(final Class clazz, final String[] keys,
+                                             final Object[] values) {
+        return hibernateTemplate.execute(new HibernateCallback<T>() {
+            @Override
+            public T doInHibernate(Session session) throws HibernateException {
+                Criteria criteria = session.createCriteria(clazz);
+                criteriaWhereCondition(criteria, keys, values);
+                return null;
+            }
+        });
+    }
+
+    /**
+     * criteria 方式拼接where条件
+     * @param criteria criteria
+     * @param keys keys
+     * @param values values
+     */
+    private void criteriaWhereCondition(Criteria criteria, String[] keys, Object[] values) {
+        if (keys != null && values != null) {
+            for (int i = 0; i < keys.length; i++) {
+                criteria.add(Restrictions.eq(keys[i], values[i]));
+            }
+        }
+    }
+
+    /**
+     *
+     * @param clazz 持久化对象
+     * @param sql sql
+     * @param keys 键
+     * @param values 值
+     * @param types 值类型
+     * @param <T> 返回数据
+     * @return 返回数据集合
+     */
+    public <T> List<T> sqlExecuteList(final Class clazz, final String sql, final String[] keys,
+                                      final Object[] values, final Type[] types) {
+        return hibernateTemplate.execute(new HibernateCallback<List<T>>() {
+            @Override
+            public List<T> doInHibernate(Session session) throws HibernateException {
+                SQLQuery query = session.createSQLQuery(sql);
+                whereCondition(query, keys, values, types);
+                if (clazz != null) {
+                    query.addEntity(clazz);
+                }
+                return ObjectUtil.typeConversion(query.list());
             }
         });
     }
@@ -97,10 +158,10 @@ abstract class BaseDao implements CrudDao {
 
     /**
      *
-     * @param query
-     * @param keys
-     * @param values
-     * @param types
+     * @param query 查询对象
+     * @param keys 键
+     * @param values 值
+     * @param types 值类型
      */
     private void fillCondition(Query query, String[] keys, Object[] values, Type[] types) {
         for (int i = 0; i < keys.length; i++) {
