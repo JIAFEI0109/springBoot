@@ -70,3 +70,15 @@ CREATE TABLE `sys_user_roles` (
   PRIMARY KEY (`rec_id`),
   UNIQUE KEY `user_id_role_id` (`user_id`,`role_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户角色关系表';
+
+DROP TABLE IF EXISTS `access_key_info`;
+CREATE TABLE `access_key_info` (
+  `rec_id` bigint(10) NOT NULL AUTO_INCREMENT  COMMENT '主键ID',
+  `access_key_id` varchar(255) NOT NULL COMMENT '密钥',
+  `access_key_secret` varchar(255) NOT NULL COMMENT '密文',
+  `access_key_desc` varchar(2000) DEFAULT NULL COMMENT '密钥描述',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `failure_time` datetime NOT NULL COMMENT '失效时间',
+  PRIMARY KEY (`rec_id`),
+  UNIQUE KEY `rec_id` (`rec_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='密钥信息表';
