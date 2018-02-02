@@ -19,34 +19,33 @@ import java.util.List;
 @ConfigurationProperties("spring.security")
 public class UserSecurityProperties {
 
-	private RememberEntity remember;
+    private RememberEntity remember;
 
-	private AdminEntity admin;
+    private AdminEntity    admin;
 
-	private String[] webAntMatchers;
+    private String[]       webAntMatchers;
 
-	private CsrfEntity csrf;
+    private CsrfEntity     csrf;
 
+    @Data
+    @ToString
+    public static class RememberEntity {
+        private String key;
+        private String paramter;
+        private String cookieName;
+    }
 
-	@Data
-	@ToString
-	public static class RememberEntity {
-		private String key;
-		private String paramter;
-		private String cookieName;
-	}
+    @Data
+    @ToString
+    public static class AdminEntity {
+        private String[] resources;
+    }
 
-	@Data
-	@ToString
-	public static class AdminEntity {
-		private String[] resources;
-	}
-
-	@Data
-	@ToString
-	public static class CsrfEntity {
-		private Boolean enable;
-		private List<String> execludeUrls;
-	}
+    @Data
+    @ToString
+    public static class CsrfEntity {
+        private Boolean      enable;
+        private List<String> execludeUrls;
+    }
 
 }

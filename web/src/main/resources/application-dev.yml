@@ -39,7 +39,17 @@ spring:
       charset: UTF-8
       force: true
   #redis相关参数
-
+  redis:
+    service-on: true
+    database: 0
+    host: localhost
+    port: 6379
+    password:
+    pool:
+      max-idle: 8
+      min-idle: 0
+      max-active: 8
+      max-wait: -1
 
 
   #MySQL数据源相关参数

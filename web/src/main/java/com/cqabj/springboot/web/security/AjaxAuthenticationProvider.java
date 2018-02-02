@@ -10,7 +10,6 @@ import com.cqabj.springboot.utils.HmacSHA1;
 import com.cqabj.springboot.utils.NetworkUtil;
 import com.cqabj.springboot.utils.ObjectUtil;
 import com.cqabj.springboot.utils.StringUtils;
-import com.cqabj.springboot.web.config.interceptor.SignInterceptor;
 import com.cqabj.springboot.web.service.AccessKeyService;
 import com.cqabj.springboot.web.service.SpringSecurityService;
 import com.google.common.base.Splitter;
@@ -19,12 +18,9 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
@@ -39,8 +35,6 @@ import java.util.List;
 @Slf4j
 public class AjaxAuthenticationProvider extends AbstractAuthenticationProcessingFilter {
 
-    private static final boolean  POST_ONLY = true;
-
     private SpringSecurityService springSecurityService;
 
     public AjaxAuthenticationProvider(SpringSecurityService springSecurityService) {
@@ -53,15 +47,10 @@ public class AjaxAuthenticationProvider extends AbstractAuthenticationProcessing
      * @param request http请求
      * @param response http响应
      * @return 放回权限
-     * @throws AuthenticationException 权限异常
-     * @throws IOException io异常
-     * @throws ServletException servlet异常
      */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
-                                                HttpServletResponse response) throws AuthenticationException,
-                                                                              IOException,
-                                                                              ServletException {
+                                                HttpServletResponse response) {
         if (IGlobalConstant.POST_ONLY
             && !IGlobalConstant.HTTP_METHOD.equalsIgnoreCase(request.getMethod())) {
             throw new AuthenticationServiceException(

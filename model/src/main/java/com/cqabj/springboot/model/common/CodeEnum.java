@@ -55,7 +55,7 @@ public enum CodeEnum {
                        */
                       ERROR_20003(20003L, "用户已经失效,无法登陆");
 
-    private Long   code;
+	private Long   code;
     private String msg;
 
     CodeEnum(Long code, String msg) {

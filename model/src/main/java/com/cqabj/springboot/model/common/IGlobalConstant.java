@@ -7,6 +7,10 @@ package com.cqabj.springboot.model.common;
  * @version V1.0 --2018/1/22-${time}
  */
 public interface IGlobalConstant {
+    /**
+     * 默认cahce key
+     */
+    String  DEFAULT_CACHE_NAME          = "DEFAULT_CACHE";
 
     String  CURRENT_USER                = "currentUser";
     /**
@@ -60,7 +64,7 @@ public interface IGlobalConstant {
     /**
      * 登录方式
      */
-    String  LOGIN_TYPE_PARAMETER       = "loginType";
+    String  LOGIN_TYPE_PARAMETER        = "loginType";
     /**
      * 浏览器类型
      */
@@ -126,4 +130,5 @@ public interface IGlobalConstant {
      * 冒号(:)
      */
     String  COLON                       = ":";
+
 }

@@ -1,8 +1,10 @@
 package com.cqabj.springboot.web.config.security;
 
 import com.cqabj.springboot.web.common.props.UserSecurityProperties;
+import com.cqabj.springboot.web.security.AjaxAuthenticationFailureHandler;
 import com.cqabj.springboot.web.security.AjaxAuthenticationProvider;
 import com.cqabj.springboot.web.security.LogoutSuccessHandler;
+import com.cqabj.springboot.web.security.MySecurityFilter;
 import com.cqabj.springboot.web.security.MyTokenBasedRememberMeServices;
 import com.cqabj.springboot.web.service.SpringSecurityService;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,8 @@ import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy;
@@ -26,6 +30,7 @@ import org.springframework.security.web.authentication.session.SessionFixationPr
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.annotation.Resource;
+import javax.servlet.Filter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -47,11 +52,15 @@ import java.util.regex.Matcher;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Resource
-    private UserSecurityProperties securityProperties;
+    private UserSecurityProperties           securityProperties;
     @Resource
-    private UserDetailsService     userDetailsService;
+    private UserDetailsService               userDetailsService;
     @Resource
-    private SpringSecurityService  springSecurityService;
+    private SpringSecurityService            springSecurityService;
+    @Resource
+    private AjaxAuthenticationFailureHandler ajaxFailureHandler;
+    @Resource
+    private AuthenticationSuccessHandler     ajaxSuccessHandler;
 
     private MyTokenBasedRememberMeServices rememberMeServices() {
         MyTokenBasedRememberMeServices services = new MyTokenBasedRememberMeServices(
@@ -62,13 +71,34 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return services;
     }
 
+    /**
+     * 身份验证的主要策略设置接口
+     */
     @Override
     protected AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
     }
 
-    private AjaxAuthenticationProvider ajaxLoginFilter() {
+    private Filter mySecurityFilter() throws Exception {
+        MySecurityFilter filter = new MySecurityFilter();
+        filter.setAuthenticationManager(authenticationManager());
+        //授权访问
+        //filter.setAccessDecisionManager();
+        //TODO 未完成
         return null;
+    }
+
+    private AjaxAuthenticationProvider ajaxLoginFilter() throws Exception {
+        //登录处理拦截器
+        AjaxAuthenticationProvider provider = new AjaxAuthenticationProvider(springSecurityService);
+        provider.setAuthenticationManager(authenticationManager());
+        //登录失败处理拦截器
+        provider.setAuthenticationFailureHandler(ajaxFailureHandler);
+        //登录成功处理拦截器
+        provider.setAuthenticationSuccessHandler(ajaxSuccessHandler);
+        //设置cookieToken,下次就直接登录
+        provider.setRememberMeServices(rememberMeServices());
+        return provider;
     }
 
     /**
@@ -142,9 +172,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             //控制登录用户,及session无效后跳转
             .and().sessionManagement()
             .sessionAuthenticationStrategy(sessionAuthenticationStrategy())
-            .invalidSessionUrl("/logon");
-        //添加过滤器
-        //.and().addFilter(, UsernamePasswordAuthenticationFilter.class);
+            .invalidSessionUrl("/logon")
+            //添加过滤器
+            .and().addFilterAt(ajaxLoginFilter(), UsernamePasswordAuthenticationFilter.class)
+            .addFilterAt(mySecurityFilter(), FilterSecurityInterceptor.class);
     }
 
     private RequestMatcher userRequiresCsrfMatcher() {
