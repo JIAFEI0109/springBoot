@@ -1,5 +1,6 @@
 package com.cqabj.springboot.utils;
 
+import com.sun.org.apache.regexp.internal.RE;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayOutputStream;
@@ -59,5 +60,20 @@ public class StringUtils {
             log.error("读取配置文件失败:" + outPutException(e));
         }
         return null;
+    }
+
+    /**
+     * 匹配url
+     * @param source 源字符串
+     * @param target 目标字符串
+     * @return boolean
+     */
+    public static boolean match(String source, String target) {
+        //?转为&,避免正则中匹配,*转为.*匹配任意字符,前后加上^和&
+        //没有*号即为^source$必须完全匹配
+        source = "^" + source.replace("?", "&").replace("*", ".*") + "$";
+        //?转为&,避免正则中匹配
+        target = target.replace("?", "&");
+        return target.matches(source);
     }
 }

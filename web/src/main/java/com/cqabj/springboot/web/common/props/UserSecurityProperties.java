@@ -9,14 +9,13 @@ import java.util.List;
 
 /**
  * spring security相关配置
- *
  * @author fjia
  * Created by cqabj on 2018/1/28.
  */
 @Data
 @ToString
 @Component
-@ConfigurationProperties("spring.security")
+@ConfigurationProperties("base.spring.security")
 public class UserSecurityProperties {
 
     private RememberEntity remember;
@@ -31,7 +30,7 @@ public class UserSecurityProperties {
     @ToString
     public static class RememberEntity {
         private String key;
-        private String paramter;
+        private String parameter;
         private String cookieName;
     }
 

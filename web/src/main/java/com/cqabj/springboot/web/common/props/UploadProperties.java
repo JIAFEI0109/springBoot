@@ -13,8 +13,7 @@ import org.springframework.stereotype.Component;
 @Data
 @ToString
 @Component
-//@PropertySource("classpath:config/upload.properties")
-@ConfigurationProperties(prefix = "upload", ignoreUnknownFields = false)
+@ConfigurationProperties(prefix = "path.upload")
 public class UploadProperties {
 
     private FileEntiy       file;

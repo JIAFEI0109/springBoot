@@ -130,5 +130,12 @@ public interface IGlobalConstant {
      * 冒号(:)
      */
     String  COLON                       = ":";
-
+    /**
+     * 不进行分页
+     */
+    Integer NO_PAGE_QUERY               = -1;
+    /**
+     * 不分页索引
+     */
+    Integer NO_PAGE_INDEX               = -1;
 }

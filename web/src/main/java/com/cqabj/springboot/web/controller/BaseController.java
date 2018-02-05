@@ -14,8 +14,17 @@ import springfox.documentation.annotations.ApiIgnore;
 @RestController
 public class BaseController {
 
-	@RequestMapping(value = "/authExp")
-	public ResultInfo<String> authExp(){
-		return ResultInfo.createResult(CodeEnum.ERROR_20001);
-	}
+    @RequestMapping(value = "/authExp")
+    public ResultInfo<String> authExp() {
+        return ResultInfo.createResult(CodeEnum.ERROR_20001);
+    }
+
+    /**
+     * 未登录用户访问URL进入此方法
+     */
+    @RequestMapping(value = "/logon")
+    public ResultInfo<String> logon() {
+        return ResultInfo.createResult(CodeEnum.ERROR_10000);
+    }
+
 }

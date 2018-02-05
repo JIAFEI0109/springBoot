@@ -16,4 +16,11 @@ public interface SysResourceDao extends CrudDao {
      * @return List<SysResources>
      */
     List<SysResources> getResourcesByUid(Long uId);
+
+
+    /**
+     * 获取客户端所有资源
+     * @return List<SysResources>
+     */
+    List<SysResources> getClientAllResources();
 }

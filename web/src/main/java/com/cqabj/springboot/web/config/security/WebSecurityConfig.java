@@ -4,23 +4,23 @@ import com.cqabj.springboot.web.common.props.UserSecurityProperties;
 import com.cqabj.springboot.web.security.AjaxAuthenticationFailureHandler;
 import com.cqabj.springboot.web.security.AjaxAuthenticationProvider;
 import com.cqabj.springboot.web.security.LogoutSuccessHandler;
+import com.cqabj.springboot.web.security.MyAccessDecisionManager;
 import com.cqabj.springboot.web.security.MySecurityFilter;
+import com.cqabj.springboot.web.security.MySecurityMetadataSource;
 import com.cqabj.springboot.web.security.MyTokenBasedRememberMeServices;
 import com.cqabj.springboot.web.service.SpringSecurityService;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.ConcurrentSessionControlAuthenticationStrategy;
@@ -28,15 +28,10 @@ import org.springframework.security.web.authentication.session.RegisterSessionAu
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
 import org.springframework.security.web.util.matcher.RequestMatcher;
-
 import javax.annotation.Resource;
 import javax.servlet.Filter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentMap;
-import java.util.regex.Matcher;
 
 /**
  * security安全框架
@@ -52,7 +47,7 @@ import java.util.regex.Matcher;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Resource
-    private UserSecurityProperties           securityProperties;
+    private UserSecurityProperties           userSecurityProperties;
     @Resource
     private UserDetailsService               userDetailsService;
     @Resource
@@ -61,36 +56,43 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private AjaxAuthenticationFailureHandler ajaxFailureHandler;
     @Resource
     private AuthenticationSuccessHandler     ajaxSuccessHandler;
+    @Resource
+    private MySecurityMetadataSource         mySecurityMetadataSource;
+    @Resource
+    private MyAccessDecisionManager          myAccessDecisionManager;
+
 
     private MyTokenBasedRememberMeServices rememberMeServices() {
         MyTokenBasedRememberMeServices services = new MyTokenBasedRememberMeServices(
-            securityProperties.getRemember().getKey(), userDetailsService);
-        services.setCookieName(securityProperties.getRemember().getCookieName());
-        services.setParameter(securityProperties.getRemember().getParamter());
+            userSecurityProperties.getRemember().getKey(), userDetailsService);
+        services.setCookieName(userSecurityProperties.getRemember().getCookieName());
+        services.setParameter(userSecurityProperties.getRemember().getParameter());
         services.setSpringSecurityService(springSecurityService);
         return services;
     }
 
-    /**
-     * 身份验证的主要策略设置接口
-     */
-    @Override
-    protected AuthenticationManager authenticationManager() throws Exception {
-        return super.authenticationManager();
+    private RequestMatcher userRequiresCsrfMatcher() {
+        UserRequiresCsrfMatcher csrfMatcher = new UserRequiresCsrfMatcher();
+        csrfMatcher.setExecludeUrlsl(userSecurityProperties.getCsrf().getExecludeUrls());
+        return csrfMatcher;
     }
 
     private Filter mySecurityFilter() throws Exception {
         MySecurityFilter filter = new MySecurityFilter();
+        //身份验证的主要策略设置接口
         filter.setAuthenticationManager(authenticationManager());
-        //授权访问
-        //filter.setAccessDecisionManager();
-        //TODO 未完成
-        return null;
+        //验证是否需要权限访问
+        //并将访问的url需要的权限返回
+        filter.setSecurityMetadataSource(mySecurityMetadataSource);
+        //授权访问(判断是否有权限访问)
+        filter.setAccessDecisionManager(myAccessDecisionManager);
+        return filter;
     }
 
     private AjaxAuthenticationProvider ajaxLoginFilter() throws Exception {
         //登录处理拦截器
         AjaxAuthenticationProvider provider = new AjaxAuthenticationProvider(springSecurityService);
+        //身份验证的主要策略设置接口
         provider.setAuthenticationManager(authenticationManager());
         //登录失败处理拦截器
         provider.setAuthenticationFailureHandler(ajaxFailureHandler);
@@ -140,11 +142,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * web相关配置静态资源
      * @param web web
-     * @throws Exception exception
      */
     @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(securityProperties.getWebAntMatchers());
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers(userSecurityProperties.getWebAntMatchers());
     }
 
     /**
@@ -154,6 +155,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         //没有权限异常拦截向/authExp 跳转
         http.exceptionHandling().accessDeniedPage("/authExp")
             //除了error其他所有访问都具有USER权限
@@ -167,7 +169,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             //跨域
             .and().csrf().requireCsrfProtectionMatcher(userRequiresCsrfMatcher())
             //自动登录
-            .and().rememberMe().key(securityProperties.getRemember().getKey())
+            .and().rememberMe().key(userSecurityProperties.getRemember().getKey())
             .rememberMeServices(rememberMeServices())
             //控制登录用户,及session无效后跳转
             .and().sessionManagement()
@@ -178,9 +180,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .addFilterAt(mySecurityFilter(), FilterSecurityInterceptor.class);
     }
 
-    private RequestMatcher userRequiresCsrfMatcher() {
-        UserRequiresCsrfMatcher csrfMatcher = new UserRequiresCsrfMatcher();
-        csrfMatcher.setExecludeUrlsl(securityProperties.getCsrf().getExecludeUrls());
-        return csrfMatcher;
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        super.configure(auth);
+        auth.userDetailsService(userDetailsService);
     }
+
 }

@@ -1,5 +1,6 @@
 package com.cqabj.springboot.web.dao.impl;
 
+import com.cqabj.springboot.model.common.IGlobalConstant;
 import com.cqabj.springboot.utils.ObjectUtil;
 import com.cqabj.springboot.web.dao.CrudDao;
 import org.apache.commons.lang3.ArrayUtils;
@@ -61,7 +62,39 @@ abstract class BaseDao implements CrudDao {
 
     @Override
     public <T> List<T> finAll(Class clazz) {
-        return null;
+        return criteriaExecute(clazz);
+    }
+
+    public <T> List<T> criteriaExecute(Class clazz) {
+        return criteriaExecuteList(clazz, IGlobalConstant.NO_PAGE_QUERY,
+            IGlobalConstant.NO_PAGE_INDEX, null, null);
+    }
+
+    /**
+     * 查询list集合
+     * @param clazz 持久化集合
+     * @param pageSize 分页大小
+     * @param pageIndex 页码
+     * @param keys 查询key 实体的属性名
+     * @param values 查询条件
+     * @param <T> 返回集合
+     * @return List<T>
+     */
+    public <T> List<T> criteriaExecuteList(final Class clazz, final Integer pageSize,
+                                           final Integer pageIndex, final String[] keys,
+                                           final Object[] values) {
+        return hibernateTemplate.execute(new HibernateCallback<List<T>>() {
+            @Override
+            public List<T> doInHibernate(Session session) throws HibernateException {
+                Criteria criteria = session.createCriteria(clazz);
+                if (pageIndex > -1 && pageSize > 0) {
+                    criteria.setFirstResult(pageSize * pageIndex);
+                    criteria.setMaxResults(pageIndex);
+                }
+                criteriaWhereCondition(criteria, keys, values);
+                return ObjectUtil.typeConversion(criteria.list());
+            }
+        });
     }
 
     @Override
