@@ -40,6 +40,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException(loginName.concat("用户不存在!"));
         }
         //封装成spring security的user
-        return new User(user.getLoginName(), user.getPwd(), ehCacheService.getAuthorities(user));
+        return new User(user.getUserName(), user.getLoginPwd(), ehCacheService.getAuthorities(user));
     }
 }

@@ -186,11 +186,22 @@ abstract class BaseDao implements CrudDao {
     private void whereCondition(Query query, String[] keys, Object[] values, Type[] types) {
         if (ArrayUtils.isNotEmpty(keys) && ArrayUtils.isNotEmpty(types)) {
             fillCondition(query, keys, values, types);
+            return;
+        }
+        if (ArrayUtils.isNotEmpty(keys)) {
+            fillCondition(query, keys, values);
+            return;
+        }
+        if (ArrayUtils.isNotEmpty(types)) {
+            fillCondition(query, values, types);
+            return;
+        }
+        if (ArrayUtils.isNotEmpty(values)) {
+            fillCondition(query, values);
         }
     }
 
     /**
-     *
      * @param query 查询对象
      * @param keys 键
      * @param values 值
@@ -199,6 +210,38 @@ abstract class BaseDao implements CrudDao {
     private void fillCondition(Query query, String[] keys, Object[] values, Type[] types) {
         for (int i = 0; i < keys.length; i++) {
             query.setParameter(keys[i], values[i], types[i]);
+        }
+    }
+
+    /**
+     * @param query 查询对象
+     * @param keys 键
+     * @param values 值
+     */
+    private void fillCondition(Query query, String[] keys, Object[] values) {
+        for (int i = 0; i < values.length; i++) {
+            query.setParameter(keys[i], values[i]);
+        }
+    }
+
+    /**
+     * @param query 查询对象
+     * @param values 值
+     * @param types 值类型
+     */
+    private void fillCondition(Query query, Object[] values, Type[] types) {
+        for (int i = 0; i < values.length; i++) {
+            query.setParameter(i, values[i], types[i]);
+        }
+    }
+
+    /**
+     * @param query 查询对象
+     * @param values 值
+     */
+    private void fillCondition(Query query, Object[] values) {
+        for (int i = 0; i < values.length; i++) {
+            query.setParameter(i, values[i]);
         }
     }
 

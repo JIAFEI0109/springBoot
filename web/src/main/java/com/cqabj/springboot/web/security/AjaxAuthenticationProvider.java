@@ -75,7 +75,7 @@ public class AjaxAuthenticationProvider extends AbstractAuthenticationProcessing
         UserInfo userInfo = checkPwd(username, password);
         userInfo.setLoginType(loginType);
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-            userInfo.getLoginName(), userInfo.getPwd());
+            userInfo.getUserName(), userInfo.getLoginPwd());
         //验证用户信息
         springSecurityService.validateUser(userInfo);
         //判断登陆类型:客户端/web端,客户端登录需要气囊验证,服务端无需签名验证
@@ -159,7 +159,7 @@ public class AjaxAuthenticationProvider extends AbstractAuthenticationProcessing
         if (userInfo == null) {
             throw new AuthenticationServiceException(CodeEnum.ERROR_20002.getMsg());
         }
-        if (!userInfo.getPwd().equals(DigestPass.getDigestPassWord(password))) {
+        if (!userInfo.getLoginPwd().equals(DigestPass.getDigestPassWord(password))) {
             throw new AuthenticationServiceException(CodeEnum.ERROR_10001.getMsg());
         }
         if (IGlobalConstant.DISABLED.equals(userInfo.getDisableFlag())) {

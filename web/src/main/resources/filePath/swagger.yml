@@ -1,0 +1,13 @@
+##swagger2配置
+swagger:
+  base-package: com.cqabj.springboot
+  title: springboot服务接口
+  description: spring服务端详细接口
+  terms-of-serviceurl: #http.baidu.com
+  version: #2.0
+  license: #重庆安碧捷科技股份有限公司
+  license-url: #http://www.cnambition.com/
+  contact:
+    name: # Feijia
+    url: #http://www.baidu.com
+    mail: #

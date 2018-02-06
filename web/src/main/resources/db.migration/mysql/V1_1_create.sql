@@ -5,12 +5,18 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `user_info`;
 CREATE TABLE `user_info` (
-  `u_id` bigint(10) NOT NULL AUTO_INCREMENT,
-  `user_name` varchar(255) NOT NULL,
-  `login_name` varchar(255) NOT NULL,
-  `pwd` varchar(255) NOT NULL,
-  PRIMARY KEY (`u_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `u_id` bigint(10) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+  `user_name` varchar(255) DEFAULT NULL COMMENT '用户名称',
+  `user_desc` varchar(255) DEFAULT NULL COMMENT '用户描述',
+  `login_pwd` varchar(255) NOT NULL COMMENT '用户密码',
+  `user_type` varchar(255) DEFAULT NULL COMMENT '用户类别',
+  `disable_flag` bigint(10) DEFAULT '1' COMMENT '0禁用、1.使用',
+  `is_sys` bigint(10) DEFAULT '0' COMMENT '是否是超级管理员0不是1是',
+  `gmt_create` datetime DEFAULT NULL COMMENT '创建时间',
+  `gmt_mod` datetime DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`u_id`),
+  UNIQUE KEY `u_id` (`u_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='员工信息表';
 
 -- ----------------------------
 -- Table structure for `sys_resources`

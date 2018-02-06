@@ -1,6 +1,7 @@
 package com.cqabj.springboot.web.dao;
 
 import com.cqabj.springboot.model.entity.UserInfo;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * 用户基础信息接口
@@ -8,7 +9,7 @@ import com.cqabj.springboot.model.entity.UserInfo;
  * @author fjia
  * @version V1.0 --2018/1/29-${time}
  */
-public interface UserInfoDao extends CrudDao {
+public interface UserInfoDao<T> extends CrudDao {
 
     /**
      * 通过用户名称来获取UserInfo相关信息

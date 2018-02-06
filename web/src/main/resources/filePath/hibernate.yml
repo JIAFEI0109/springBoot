@@ -1,0 +1,11 @@
+##hibernate配置
+hibernate:
+  hbm2ddl:
+    auto: validate
+  show-sql: false
+  format-sql: false
+  use-sql-comments: false
+  dialect: org.hibernate.dialect.MySQLInnoDBDialect
+  packages-to-scan: com.cqabj.springboot.model.common,com.cqabj.springboot.model
+  cache:
+    provider-class: org.hibernate.cache.NoCacheProvider

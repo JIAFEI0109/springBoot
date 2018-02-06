@@ -1,7 +1,7 @@
 ##配置内置Tomcat相关参数,使用尾部Tomcat时不生效
 server:
   port: 8080
-  contextPath: /springBoot
+  contextPath: /springboot
   session:
     timeout: 1800
   tomcat:
@@ -22,15 +22,13 @@ server:
 #  user: root
 #  password: cqabj208
 #  url: jdbc:mysql://192.168.2.55:3306/springBoot?useUnicode=true&amp;characterEncoding=UTF-8
-##跨域指定域名IP,配置
 
 ##日志
-#logging:
-#  path: @log.file.path@/springBoot
-#  file: @log.file.path@/springBoot.log
-#  console-charset: @logging.console.charset@
-#  file-charset: UTF-8
-##不需要数据签名验证的方法
+logging:
+  path: F:/upload/springboot
+  file: F:/upload/springboot/springboot.log
+  console-charset: UTF-8
+  file-charset: UTF-8
 
 ##Spring配置
 spring:
@@ -57,8 +55,8 @@ spring:
     #druid数据库连接池
     druid:
       enable: true
-      driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://192.168.2.55:3306/springboot?serverTimezone=GMT # log4jdbc会记录sql
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://192.168.2.55:3306/springboot?serverTimezone=GMT&useSSL=false # log4jdbc会记录sql
       username: root
       password: cqabj208
       #连接池配置
@@ -111,16 +109,16 @@ spring:
         login-password: cqabj208
         reset-enable: false
 ##hibernate配置
-  jpa:
-    database: mysql
-    hibernate:
-      ddl-auto: validate
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
-        packageToScan: com.cqabj.springboot.model
-        cahce:
-          provider_class: org.hibernate.cache.NoCacheProvider
+#  jpa:
+#    database: mysql
+#    hibernate:
+#      ddl-auto: validate
+#      naming:
+#        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQL5Dialect
+#        packageToScan: com.cqabj.springboot.model.entity
+#        cahce:
+#          provider_class: org.hibernate.cache.NoCacheProvider

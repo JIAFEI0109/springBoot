@@ -1,19 +1,13 @@
 package com.cqabj.springboot.web;
 
 import com.cqabj.springboot.utils.StringUtils;
-import lombok.AllArgsConstructor;
 import org.springframework.boot.env.YamlPropertySourceLoader;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.PropertySource;
 import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * @author fjia
@@ -26,7 +20,7 @@ public class MyApplicationContextInitializer implements
     @Override
     public void initialize(ConfigurableApplicationContext context) {
 
-        String[] resourcesPath = { "config.yml", "path.yml" };
+        String[] resourcesPath = { "config.yml", "path.yml","swagger.yml","hibernate.yml" };
         for (String resourcePath : resourcesPath) {
             addResources(context, resourcePath);
         }
@@ -34,7 +28,7 @@ public class MyApplicationContextInitializer implements
 
     private void addResources(ConfigurableApplicationContext context, String resourcePath) {
         try {
-            Resource resource = context.getResource("classpath:" + resourcePath);
+            Resource resource = context.getResource("classpath:filePath/" + resourcePath);
             YamlPropertySourceLoader sourceLoader = new YamlPropertySourceLoader();
             PropertySource<?> load = sourceLoader.load(resourcePath.replace(".yml", ""), resource,
                 null);

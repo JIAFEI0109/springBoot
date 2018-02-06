@@ -14,14 +14,29 @@ base:
           - /management
       #静态资源
       web-ant-matchers:
+        - /doc.html
+        - /swagger-ui.html
+        - /webjars/**
+        - /swagger-resources/**
+        - /v2/**
+        - /api
+        - /db
         - /favicon.ico
+        - /resources/**
         - /druid/**
+        - /accessKey/**
+        - /error
+        - /logout
+        - /logon
+        - /web/**
         - /image/**
         - /tempImage/**
         - /file/**
+        - /authExp
       #跨域制定域名IP
       csrf:
         enable: true
         execludeUrls:
           - 127.0.0.1
+          - 192.168.2.55:8080
           - localhost
